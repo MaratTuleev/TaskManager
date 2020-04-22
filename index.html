@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="task-manager">
+    <div class="header">
+        <label for="input">Введите название задачи</label>
+        <br><input class="input" id="input" type="text">
+        <input type="button" value="submit">
+    </div>
+    <div class="sort-filter">
+        <select class="sort">
+            <option selected value="sort-new">Сначала новые</option>
+            <option value="sort-old">Сначала старые</option>
+        </select>
+        <div class="filter">
+            Выберите фильтр<br>
+            <input name="filter" type="radio" value="rad1">Завершённые<br>
+            <input name="filter" type="radio" value="rad2">Незавершённые
+        </div>
+    </div>
+    <div class="tasks">
+        <div class="task">
+            <p class="close">x</p>
+            <div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda eum
+                exercitationem odit quae
+                quasi saepe velit. Adipisci architecto illum itaque laudantium neque obcaecati, provident quos
+                reiciendis Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aperiam asperiores,
+                beatae consequuntur doloremque eius eveniet, illum iure numquam possimus quaerat quod recusandae
+                reprehenderit rerum tempora tempore tenetur! Possimus, rerum!eiciendis Lorem ipsum dolor sit amet,
+                consectetur adipisicing elit. Accusantium aperiam asperiores,
+                beatae consequuntur doloremque eius eveniet, illum iure numquam possimus quaerat quod recusandae
+                reprehenderit rerum tempora tempore tenetur! Possimus, rerum!
+                reprehenderit rerum tempora tempore tenetur! Possimus, rerum!eiciendis Lorem ipsum dolor sit amet,
+                consectetur adipisicing elit. Accusantium aperiam asperiores,
+                beatae consequuntur doloremque eius eveniet, illum iure numquam possimus quaerat quod recusandae
+                reprehenderit rerum tempora tempore tenetur! Possimus, rerum!
+                rem vel. Laboriosam?
+            </div>
+            <div class="task-footer">
+                <input type="date" class="date" value="2020-04-22">
+                <button class="status">finish</button>
+            </div>
+        </div>
+        <div class="task">
+            <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda eum
+                exercitationem odit quae
+                quasi saepe velit. Adipisci architecto illum itaque laudantium neque obcaecati, provident quos
+                reiciendis
+                rem vel. Laboriosam? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid
+                consequuntur
+                debitis dicta iste quae vel voluptate! Amet consectetur expedita, iusto maiores maxime mollitia
+                nemo
+                neque nobis perspiciatis quaerat, tempora ullam.</p>
+            <input type="date" class="date" value="2020-04-22">
+            <p class="close">x</p>
+            <button class="status">finish</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
