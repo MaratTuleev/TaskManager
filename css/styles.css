@@ -45,12 +45,14 @@ body{
     padding: 10px 0;
     max-height: 200px;
     overflow-y: scroll;
-    margin: 12px 12px 0px 0px;
+    margin: 12px 12px 0 0;
 }
 .task-footer{
     display: flex;
     flex-direction: row;
     margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 .close{
     position: absolute;
@@ -68,6 +70,7 @@ body{
 .status{
     width: 55px;
     height: 26px;
+    cursor: pointer;
 
 }
 .date {
