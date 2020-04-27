@@ -3,36 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Task Manager</title>
+    <link href="css/materialize.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 </head>
 <body>
-<div class="task-manager">
+<div class="task-manager container">
     <div class="header">
-        <div>
-            <label>Название задачи</label>
-            <input class="input-name" type="text"/>
+        <div class="input-field col s12">
+            <input id="task-name" class="input-name validate" type="text"/>
+            <label for="task-name">Название задачи</label>
         </div>
-        <div>
-            <label>Описание задачи</label>
-            <textarea class="input-description"></textarea>
+        <div class="input-field col s12">
+            <textarea id="description" class="input-description materialize-textarea"></textarea>
+            <label for="description">Описание задачи</label>
         </div>
-        <input type="button" class="create-task-btn" value="submit">
+        <a class="create-task-btn waves-effect waves-light btn col s3"><i class="material-icons left">create</i>Создать задачу</a>
     </div>
-    <div class="sort-filter">
-        <select class="sort">
-            <option selected value="sort-new">Сначала новые</option>
-            <option value="sort-old">Сначала старые</option>
+    <div class="sort-filter row">
+        <select class="sort col s6">
+            <option value="sort-new">Сначала новые</option>
+            <option selected value="sort-old">Сначала старые</option>
         </select>
-        <div class="filter">
+        <div class="filter col s6">
             Выберите фильтр<br>
-            <input name="filter" type="radio" value="rad1"/>Все<br>
-            <input name="filter" type="radio" value="rad2"/>Завершённые<br>
-            <input name="filter" type="radio" value="rad3"/>Незавершённые
+            <form action="#">
+                <p>
+                    <label>
+                        <input name="filter" type="radio" value="rad1" checked/>
+                        <span>Все</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input name="filter" type="radio" value="rad2"/>
+                        <span>Завершённые</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input name="filter" type="radio" value="rad3"/>
+                        <span>Незавершённые</span>
+                    </label>
+                </p>
+            </form>
         </div>
     </div>
     <div class="tasks">
     </div>
 </div>
 <script src="js/script.js"></script>
+<script src="js/materialize.js"></script>
 </body>
 </html>
