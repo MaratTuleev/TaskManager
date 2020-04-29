@@ -4,6 +4,11 @@ const TASK_STATE = {
     DONE: 'done',
     CLOSED: 'closed'
 }
+const FILTERS = {
+    ALL: 'all',
+    IN_PROGRESS: 'in_progress',
+    DONE: 'done',
+}
 let taskId = 0;
 
 function getTaskId() {
@@ -68,7 +73,7 @@ function createTask(task, onClose, changeStatus) {
     divTaskFooter.classList.add('task-footer');
     divTaskFooter.classList.add('row');
     divDate.classList.add('date', 'col', 's7');
-    buttonStatus.classList.add('status', 'waves-effect', 'w', 'waves-light', 'btn-small', 'col', 's5'  );
+    buttonStatus.classList.add('status', 'waves-effect', 'w', 'waves-light', 'btn-small', 'col', 's5');
 
     //methods
     divClose.onclick = () => {
@@ -96,6 +101,7 @@ function createTask(task, onClose, changeStatus) {
 
 let tasks = [];
 
+
 const beforeCreateTask = (task) => {
     createTask(task, () => {
             tasks = tasks.filter(({id}) => id !== task.id);
@@ -108,13 +114,22 @@ const beforeCreateTask = (task) => {
 }
 
 function renderTasks(tasks) {
-    document.querySelector('.tasks').innerHTML = '';
-    const currentSort = document.querySelector('select').value;
-    tasks.sort(getCompareFunction(currentSort));
-    tasks.map(beforeCreateTask);
+    let changedTasks = [...tasks];
+    changedTasks.sort(getCompareFunction(getSort()));
+    changedTasks = changedTasks.filter(getFilterFunction(getFilter()));
+    changedTasks.map(beforeCreateTask);
 }
 
-
+const getSort = () => {
+    document.querySelector('.tasks').innerHTML = '';
+    const currentSort = document.querySelector('select').value;
+    return currentSort;
+}
+const getFilter = () => {
+    const radios = [...document.querySelectorAll('input[name=filter]')];
+    const radio = radios.find(radio => radio.checked);
+    return radio.value;
+}
 document.querySelector('.create-task-btn').onclick = function () {
     const task = getData();
     tasks.push(task);
@@ -142,6 +157,16 @@ const sortNewFunction = (a, b) => {
     // a должно быть равным b
     return 0;
 }
+const getFilterFunction = (filter) => {
+    switch (filter) {
+        case FILTERS.ALL:
+            return () => true;
+        case FILTERS.IN_PROGRESS:
+            return (task) => task.state === TASK_STATE.IN_PROGRESS
+        case FILTERS.DONE:
+            return (task) => task.state === TASK_STATE.DONE || task.state === TASK_STATE.CLOSED
+    }
+}
 const getState = (status) => {
     switch (status) {
         case TASK_STATE.START:
@@ -164,6 +189,12 @@ document.querySelector('select').onchange = function (e) {
     renderTasks(tasks);
 }
 
+const inputFilters = [...document.querySelectorAll('input[name=filter]')];
+inputFilters.map((input) => {
+    input.onchange = () => {
+        renderTasks(tasks);
+    }
+})
 
 document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('select');
