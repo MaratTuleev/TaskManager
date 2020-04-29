@@ -1,4 +1,40 @@
-function createTask(count) {
+const TASK_STATE = {
+    START: 'start',
+    IN_PROGRESS: 'in progress',
+    DONE: 'done',
+    CLOSED: 'closed'
+}
+let taskId = 0;
+
+function getTaskId() {
+    taskId = taskId + 1;
+    return taskId
+}
+
+function getData() {
+    let taskName = document.querySelector('.input-name').value;
+    let taskDescription = document.querySelector('.input-description').value;
+
+    return {
+        id: getTaskId(),
+        name: taskName,
+        description: taskDescription,
+        createdAt: new Date().toLocaleString("ru", {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        }),
+        state: TASK_STATE.START
+    }
+}
+
+function createTask(task, onClose, changeStatus) {
+
 
     //creating DOM elements
     let divTask = document.createElement('div');
@@ -10,71 +46,126 @@ function createTask(count) {
     let buttonStatus = document.createElement('button');
     let material = document.createElement('i');
 
-    buttonStatus.innerHTML = 'start';
+    if (task.state === TASK_STATE.CLOSED) {
+        buttonStatus.classList.add('disabled');
+    }
+    buttonStatus.innerHTML = task.state;
     material.innerHTML = 'close';
 
     //fill task from user input
-    let taskName = document.querySelector('.input-name');
-    let taskDescription = document.querySelector('.input-description');
-    divTaskName.innerHTML = taskName.value;
-    divDescription.innerHTML = taskDescription.value; //добавить очистку полей после добавления задачи
-    divDate.innerHTML = new Date().toLocaleString("ru", {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-    });
+
+    divTaskName.innerHTML = task.name;
+    divDescription.innerHTML = task.description; //добавить очистку полей после добавления задачи
+    divDate.innerHTML = task.createdAt;
 
     //adding classes
     divTask.classList.add('task');
-    divTask.setAttribute('data-count', count);
+    // divTask.setAttribute('data-count', count);
     divClose.classList.add('close');
     material.classList.add('material-icons');
     divTaskName.classList.add('task-name');
     divDescription.classList.add('description');
     divTaskFooter.classList.add('task-footer');
-    divDate.classList.add('date');
-    buttonStatus.classList.add('status');
-    buttonStatus.classList.add('waves-effect');
-    buttonStatus.classList.add('w');
-    buttonStatus.classList.add('waves-light');
-    buttonStatus.classList.add('btn-small');
+    divTaskFooter.classList.add('row');
+    divDate.classList.add('date', 'col', 's7');
+    buttonStatus.classList.add('status', 'waves-effect', 'w', 'waves-light', 'btn-small', 'col', 's5'  );
+
+    //methods
+    divClose.onclick = () => {
+        divTask.remove();
+        onClose();
+
+    };
+
+    buttonStatus.onclick = () => {
+        changeStatus();
+    }
 
     //add task to task manager
-    let task = document.querySelector('.tasks').appendChild(divTask);
-    let close = task.appendChild(divClose);
-    close.appendChild(material);
-    task.appendChild(divTaskName);
-    task.appendChild(divDescription);
-    let taskFooter = task.appendChild(divTaskFooter);
-    taskFooter.appendChild(divDate);
-    taskFooter.appendChild(buttonStatus);
+    divTask.append(divClose);
+    divClose.append(material);
+    divTask.append(divTaskName);
+    divTask.append(divDescription);
+    divTaskFooter.append(divDate);
+    divTaskFooter.append(buttonStatus);
+    divTask.append(divTaskFooter);
+    document.querySelector('.tasks').prepend(divTask);
 
-    divClose.onclick = function () {
-        divTask.remove();
-    }
+
 }
 
-let taskCount = '0';
+let tasks = [];
+
+const beforeCreateTask = (task) => {
+    createTask(task, () => {
+            tasks = tasks.filter(({id}) => id !== task.id);
+        },
+        () => {
+            task.state = getState(task.state);
+            renderTasks(tasks);
+        }
+    )
+}
+
+function renderTasks(tasks) {
+    document.querySelector('.tasks').innerHTML = '';
+    const currentSort = document.querySelector('select').value;
+    tasks.sort(getCompareFunction(currentSort));
+    tasks.map(beforeCreateTask);
+}
+
+
 document.querySelector('.create-task-btn').onclick = function () {
-    createTask(taskCount);
-    taskCount++;
+    const task = getData();
+    tasks.push(task);
+    renderTasks(tasks);
 }
-document.querySelector('select').onchange = function () {
-    let tasks = document.querySelectorAll('.task');
-    for (let i = tasks.length - 2; i >= 0; i--) {
-        // console.log(tasks[i].getAttribute('data-count'));
-        let a = tasks[i];
-        tasks[i].remove();
-        document.querySelector('.tasks').append(a);
 
+const sortOldFunction = (a, b) => {
+    if (a.id > b.id) {
+        return -1;
+    }
+    if (a.id < b.id) {
+        return 1;
+    }
+    return 0;
+}
+
+const sortNewFunction = (a, b) => {
+
+    if (a.id < b.id) {
+        return -1;
+    }
+    if (a.id > b.id) {
+        return 1;
+    }
+    // a должно быть равным b
+    return 0;
+}
+const getState = (status) => {
+    switch (status) {
+        case TASK_STATE.START:
+            return TASK_STATE.IN_PROGRESS;
+        case TASK_STATE.IN_PROGRESS:
+            return TASK_STATE.DONE;
+        case TASK_STATE.DONE:
+            return TASK_STATE.CLOSED;
     }
 }
-document.addEventListener('DOMContentLoaded', function() {
+const getCompareFunction = (value) => {
+    switch (value) {
+        case 'sort-new':
+            return sortNewFunction;
+        case 'sort-old':
+            return sortOldFunction;
+    }
+}
+document.querySelector('select').onchange = function (e) {
+    renderTasks(tasks);
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('select');
     var instances = M.FormSelect.init(elems, []);
 });
